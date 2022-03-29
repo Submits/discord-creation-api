@@ -15,6 +15,7 @@ The response contains:
 * A comparison from the current time to the ISO date
 * A more human friendly, readable format
 
+### Example
 Javascript example of this API:<br>
 ```js
 let id = "0"
