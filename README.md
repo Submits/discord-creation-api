@@ -14,3 +14,12 @@ The response contains:
 * The regular ISO date
 * A comparison from the current time to the ISO date
 * A more human friendly, readable format
+
+Javascript example of this API:<br>
+```js
+let id = "0"
+var response = await fetch("https://vs.now.sh/" + id)
+const data = await response.json()
+console.log(data.human + " [" + data.comparison + "]")
+```
+
