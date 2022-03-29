@@ -13,7 +13,7 @@ const app = express();
   app.get('/:id', async(req, res) => {
 res.setHeader('Access-Control-Allow-Origin', '*');
  let id = req.params.id
- res.send({date: snowflaeToDate(id)})
+ res.send({date: snowflakeToDate(id)})
 
 
 })
