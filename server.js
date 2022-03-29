@@ -8,14 +8,10 @@ const app = express();
 }
 
   app.get('/:id', async(req, res) => {
-     try{
 res.setHeader('Access-Control-Allow-Origin', '*');
  let id = req.params.id
  res.send({date: snowflakeToDate(id)})
-     }
-     catch(e){
-        res.send({error: e})
-     }
+ 
 
 
 })
