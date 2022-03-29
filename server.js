@@ -1,9 +1,6 @@
 const express = require('express');
 const app = express();
 
-@param {String} snowflake
-@returns {Date} 
-
 
    function snowflakeToDate(snowflake) {
     const dateBits = Number(BigInt.asUintN(64, snowflake) >> BigInt(unescape('%32%32')));
