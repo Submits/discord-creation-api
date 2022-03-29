@@ -8,14 +8,27 @@ const app = express();
 }
 
   app.get('/:id', async(req, res) => {
+     try{
 res.setHeader('Access-Control-Allow-Origin', '*');
  let id = req.params.id
  res.send({date: snowflakeToDate(id)})
+     }
+     catch(e){
+        res.send({error: e})
+     }
 
 
 })
 
+app.use(function(req, res, next){
+  res.status(404);
 
+  if (req.accepts('json')) {
+    res.send({error: "Route not found."});
+    return;
+  }
+
+});
  
 app.listen(process.env.PORT || 3000, () => {
   console.log("Ready")
