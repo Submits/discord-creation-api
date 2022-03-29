@@ -6,7 +6,7 @@ const app = express();
 
 
    function snowflakeToDate(snowflake) {
-    const dateBits = Number(BigInt.asUintN(64, snowflake) >> 22n);
+    const dateBits = Number(BigInt.asUintN(64, snowflake) >> BigInt(22n));
     return new Date(dateBits + 1420070400000);
 }
 
