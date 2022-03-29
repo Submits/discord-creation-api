@@ -7,24 +7,12 @@ const app = express();
     return new Date(dateBits + 1420070400000);
 }
 
-  app.get('/:id', async(req, res) => {
+  app.get('/:id',(req, res) => {
 res.setHeader('Access-Control-Allow-Origin', '*');
  let id = req.params.id
  res.send({date: snowflakeToDate(id)})
- 
-
-
 })
 
-app.use(function(req, res, next){
-  res.status(404);
-
-  if (req.accepts('json')) {
-    res.send({error: "Route not found."});
-    return;
-  }
-
-});
  
 app.listen(process.env.PORT || 3000, () => {
   console.log("Ready")
