@@ -54,17 +54,17 @@ function snowflakeToDate(snowflake) {
 app.get('/:id', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     let id = req.params.id
-    
+
     const date = new Date(snowflakeToDate(id));
-const dateTimeFormat = new Intl.DateTimeFormat('en', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric'
-});
-      
+    const dateTimeFormat = new Intl.DateTimeFormat('en', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    });
+
     res.send({
         date: snowflakeToDate(id),
         comparison: calcDate(snowflakeToDate(id)),
