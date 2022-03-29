@@ -24,3 +24,5 @@ const data = await response.json()
 console.log(data.human + " [" + data.comparison + "]")
 ```
 
+This will log `January 1, 2015, 12:00:00 AM [7 years ago]` in the console.
+
