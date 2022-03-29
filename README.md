@@ -2,7 +2,7 @@
 API that returns Discord ID creation dates.
 
 ## Usage
-To get a creation date, fetch from the following URL<br>
+To get a creation date, fetch from the following URL:<br>
 `https://creation.now.sh/<ANY_ID_HERE>`
 <br><br>
 It will return the following json response:<br>
