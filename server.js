@@ -1,78 +1,80 @@
 const express = require('express');
 const app = express();
+const fetch = require("cross-fetch")
+var faunadb = require("faunadb"),
+  q = faunadb.query
 
-function calcDate(date) {
-    dateNow = new Date();
-    dateThen = new Date(date);
-    const diffTime = Math.abs(dateThen - dateNow);
-    let seconds = Math.round(diffTime / 1000)
-    let minutes = Math.round(diffTime / 1000 / 60)
-    let hours = Math.round(diffTime / 1000 / 60 / 60)
-    let days = Math.round(diffTime / 1000 / 60 / 60 / 24)
-    let years = Math.round(diffTime / 1000 / 60 / 60 / 24 / 365)
+    var client = new faunadb.Client({
+    secret: 'fnAEm5Q9keAAxrDn7lz3-9Mx5odNX8z6EmxLw2SV',
+    domain: 'db.eu.fauna.com',
+    scheme: 'https',
+  })
 
 
-    if (seconds >= 1 && seconds < 60) {
-        if (seconds == 1) {
-            return seconds + " second ago"
-        } else {
-            return seconds + " seconds ago"
-        }
-    } else if (minutes >= 1 && minutes < 60) {
-        if (minutes == 1) {
-            return minutes + " minute ago"
-        } else {
-            return minutes + " minutes ago"
-        }
-    } else if (hours >= 1 && hours < 24) {
-        if (hours == 1) {
-            return hours + " hour ago"
-        } else {
-            return hours + " hours ago"
-        }
-    } else if (days >= 1 && days < 365) {
-        if (days == 1) {
-            return days + " day ago"
-        } else {
-            return days + " days ago"
-        }
-    } else if (years >= 1) {
-        if (years == 1) {
-            return years + " year ago"
-        } else {
-            return years + " years ago"
-        }
-    }
 
-}
 
-function snowflakeToDate(snowflake) {
-    const dateBits = Number(BigInt.asUintN(64, snowflake) >> BigInt(unescape('%32%32')));
-    return new Date(dateBits + 1420070400000);
-}
+app.get('/embed/:id', async(req, res) => {
 
-app.get('/:id', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    let id = req.params.id
 
-    const date = new Date(snowflakeToDate(id));
-    const dateTimeFormat = new Intl.DateTimeFormat('en', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-    });
+   let idd = req.params.id
 
-    res.send({
-        date: snowflakeToDate(id),
-        comparison: calcDate(snowflakeToDate(id)),
-        human: dateTimeFormat.format(date)
-    })
+  
+  if(idd == "favicon.ico" || idd == "requestProvider.js.map")
+  {
+    res.send("NO")
+  }
+  else{
+console.log(idd)
+ client.query(
+  q.Get(
+    q.Match(q.Index('embed_by_id'), idd)
+  )
+)
+.then(async function(ret){ 
+
+var response = await fetch(ret.data.video)
+const data = await response.headers
+        const html = `<!DOCTYPE html>
+  <head>
+  <meta name="twitter:card" content="player">
+<meta name="twitter:player" content="` + ret.data.video + `">
+<meta property="og:title" content="` + ret.data.title + `">
+<meta property="og:site_name" content="` + "[" + data.get('content-disposition').split("filename=")[1] + "] " + (( Math.round(((data.get('content-length') / 1024) / 1024) * 100)) / 100 + " MB") + `">
+<meta property="theme-color" content="` + "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);}) + `">
+</head>
+<style>
+body{
+  font-family: sans-serif;
+  text-align: center;
+}
+
+
+
+</style>
+<body>
+<p>absq video hosting</p>
+</body>`
+
+
+res.send(html)
+
+ 
 })
+ .catch(function(err){
+
+res.send("The resource you have requested is not available.")
+   
+ })
+
+  }
+}
+)
+
+
+
 
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log("Ready")
+  console.log("Ready")
 })
